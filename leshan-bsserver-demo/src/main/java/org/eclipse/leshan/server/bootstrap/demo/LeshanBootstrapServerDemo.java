@@ -31,6 +31,7 @@ import org.eclipse.californium.scandium.config.DtlsConnectorConfig;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.webapp.WebAppContext;
+import org.eclipse.leshan.core.californium.PrincipalMdcConnectionListener;
 import org.eclipse.leshan.core.demo.cli.ShortErrorMessageHandler;
 import org.eclipse.leshan.core.model.ObjectLoader;
 import org.eclipse.leshan.core.model.ObjectModel;
@@ -139,6 +140,7 @@ public class LeshanBootstrapServerDemo {
         if (cli.dtls.cid != null) {
             dtlsConfig.set(DtlsConfig.DTLS_CONNECTION_ID_LENGTH, cli.dtls.cid);
         }
+        dtlsConfig.setConnectionListener(new PrincipalMdcConnectionListener());
 
         if (cli.identity.isx509()) {
             // use X.509 mode (+ RPK)
