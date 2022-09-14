@@ -47,6 +47,7 @@ import org.eclipse.leshan.client.californium.endpoint.CaliforniumClientEndpoints
 import org.eclipse.leshan.client.californium.endpoint.coap.CoapOscoreProtocolProvider;
 import org.eclipse.leshan.client.californium.endpoint.coaps.CoapsClientEndpointFactory;
 import org.eclipse.leshan.client.californium.endpoint.coaps.CoapsClientProtocolProvider;
+import org.eclipse.leshan.client.californium.endpoint.coaptcp.CoapTcpClientProtocolProvider;
 import org.eclipse.leshan.client.demo.cli.LeshanClientDemoCLI;
 import org.eclipse.leshan.client.demo.cli.interactive.InteractiveCommands;
 import org.eclipse.leshan.client.engine.DefaultRegistrationEngineFactory;
@@ -254,7 +255,7 @@ public class LeshanClientDemo {
         };
 
         CaliforniumClientEndpointsProvider.Builder endpointsBuilder = new CaliforniumClientEndpointsProvider.Builder(
-                new CoapOscoreProtocolProvider(), customCoapsProtocolProvider);
+                new CoapOscoreProtocolProvider(), customCoapsProtocolProvider, new CoapTcpClientProtocolProvider());
 
         // Create Californium Configuration
         Configuration clientCoapConfig = endpointsBuilder.createDefaultConfiguration();
