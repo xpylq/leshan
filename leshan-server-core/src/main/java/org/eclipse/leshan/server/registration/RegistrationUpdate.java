@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.leshan.core.link.Link;
 import org.eclipse.leshan.core.request.BindingMode;
@@ -44,8 +45,14 @@ public class RegistrationUpdate {
     private final Link[] objectLinks;
     private final Map<String, String> additionalAttributes;
 
+    //  gateway support
+    private final String gatewayRegId;
+    private final String gatewayPrefix;
+    private final Set<String> endDeviceEndpoints;
+
+
     public RegistrationUpdate(String registrationId, Identity identity, Long lifeTimeInSec, String smsNumber,
-            EnumSet<BindingMode> bindingMode, Link[] objectLinks, Map<String, String> additionalAttributes) {
+            EnumSet<BindingMode> bindingMode, Link[] objectLinks, Map<String, String> additionalAttributes, String gatewayRegId, String gatewayPrefix, Set<String> endDeviceEndpoints) {
         Validate.notNull(registrationId);
         Validate.notNull(identity);
         this.registrationId = registrationId;
@@ -58,6 +65,9 @@ public class RegistrationUpdate {
             this.additionalAttributes = Collections.emptyMap();
         else
             this.additionalAttributes = Collections.unmodifiableMap(new HashMap<>(additionalAttributes));
+        this.gatewayRegId = gatewayRegId;
+        this.gatewayPrefix = gatewayPrefix;
+        this.endDeviceEndpoints = endDeviceEndpoints;
     }
 
     /**
@@ -77,6 +87,11 @@ public class RegistrationUpdate {
                 ? registration.getAdditionalRegistrationAttributes()
                 : updateAdditionalAttributes(registration.getAdditionalRegistrationAttributes());
 
+        // gateway support
+        String gatewayRegId = this.gatewayRegId != null? this.gatewayRegId : registration.getGatewayRegId();
+        String gatewayPrefix = this.gatewayPrefix != null ? this.gatewayPrefix : registration.getGatewayPrefix();
+        Set<String> endDeviceEndpoints = this.endDeviceEndpoints != null ? this.endDeviceEndpoints : registration.getEndDeviceEndpoints();
+
         // this needs to be done in any case, even if no properties have changed, in order
         // to extend the client registration time-to-live period ...
         Date lastUpdate = new Date();
@@ -92,10 +107,11 @@ public class RegistrationUpdate {
                 .supportedContentFormats(registration.getSupportedContentFormats())
                 .supportedObjects(registration.getSupportedObject())
                 .availableInstances(registration.getAvailableInstances())
-                .applicationData(registration.getApplicationData());
-
+                .applicationData(registration.getApplicationData())
+                .gatewayRegId(gatewayRegId)
+                .gatewayPrefix(gatewayPrefix)
+                .endDeviceEndpoints(endDeviceEndpoints);
         return builder.build();
-
     }
 
     public String getRegistrationId() {

@@ -161,9 +161,14 @@ public class CaliforniumLwM2mRequestSender implements LwM2mRequestSender, CoapRe
         // Retrieve the objects definition
         final LwM2mModel model = modelProvider.getObjectModel(destination);
 
+        String rootPath = destination.getRootPath();
+        if (destination.getGatewayPrefix() != null) {
+            rootPath+=destination.getGatewayPrefix();
+        }
+
         // Send requests asynchronously
         sender.sendLwm2mRequest(destination.getEndpoint(), destination.getIdentity(), destination.getId(), model,
-                destination.getRootPath(), request, lowerLayerConfig, timeoutInMs, new ResponseCallback<T>() {
+                rootPath, request, lowerLayerConfig, timeoutInMs, new ResponseCallback<T>() {
                     @Override
                     public void onResponse(T response) {
                         if (response != null && response.getClass() == ObserveResponse.class && response.isSuccess()) {

@@ -33,6 +33,7 @@ import org.eclipse.leshan.core.Destroyable;
 import org.eclipse.leshan.core.Startable;
 import org.eclipse.leshan.core.Stoppable;
 import org.eclipse.leshan.core.californium.CoapResponseCallback;
+import org.eclipse.leshan.core.link.Link;
 import org.eclipse.leshan.core.link.lwm2m.LwM2mLinkParser;
 import org.eclipse.leshan.core.node.codec.CodecException;
 import org.eclipse.leshan.core.node.codec.LwM2mDecoder;
@@ -125,6 +126,8 @@ public class LeshanServer {
     protected final boolean updateRegistrationOnNotification;
 
     protected final LwM2mLinkParser linkParser;
+
+    private RegistrationHandler registrationHandler;
 
     /**
      * Initialize a server which will bind to the specified address and port.
@@ -221,8 +224,9 @@ public class LeshanServer {
             presenceService = createPresenceService(registrationService, awakeTimeProvider);
         }
 
+        registrationHandler = new RegistrationHandler(registrationService, authorizer, registrationIdProvider);
         // define /rd resource
-        coapServer.add(createRegisterResource(registrationService, authorizer, registrationIdProvider));
+        coapServer.add(createRegisterResource());
 
         // define /dp resource
         this.sendService = createSendHandler();
@@ -281,10 +285,8 @@ public class LeshanServer {
         return presenceService;
     }
 
-    protected CoapResource createRegisterResource(RegistrationServiceImpl registrationService, Authorizer authorizer,
-            RegistrationIdProvider registrationIdProvider) {
-        return new RegisterResource(new RegistrationHandler(registrationService, authorizer, registrationIdProvider),
-                linkParser);
+    protected CoapResource createRegisterResource() {
+        return new RegisterResource(registrationHandler, linkParser);
     }
 
     protected SendHandler createSendHandler() {
@@ -687,6 +689,11 @@ public class LeshanServer {
         } else {
             return null;
         }
+    }
+
+    public boolean registerEndIotDevice(String gatewayRegId, String endpoint, String prefix,
+            Link[] objectLinks) {
+        return registrationHandler.registerEndDevice(gatewayRegId, endpoint, prefix, objectLinks);
     }
 
     /**
