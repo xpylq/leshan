@@ -119,9 +119,6 @@ public class RegistrationHandler {
         builder.objectLinks(objectLinks);
         builder.extractDataFromObjectLink(true); // JV: not sure if it's useful or not
 
-        // TODO: fixme once request sender understand gateways/end iot devices
-        builder.rootPath(prefix);
-
         // TODO: how to handle identity with gateways ??
         // we probably need a service which can authorize a given gateway to manage a list of end devices
         // final Registration registration = authorizer.isAuthorized(registerRequest, builder.build(),
