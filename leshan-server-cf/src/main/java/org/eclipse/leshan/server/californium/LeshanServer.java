@@ -691,6 +691,14 @@ public class LeshanServer {
         }
     }
 
+    /**
+     * Register an "end IoT device", a device communicating thru a gateway (see object 25 specification)
+     * @param gatewayRegId the registration identifier of the gateway used for communicating
+     * @param endpoint this device endpoint
+     * @param prefix the prefix (CoAP path) used for communicating on the gateway
+     * @param objectLinks the list of supported object
+     * @return <code>true</code> if the device is registered successfully
+     */
     public boolean registerEndIotDevice(String gatewayRegId, String endpoint, String prefix,
             Link[] objectLinks) {
         return registrationHandler.registerEndDevice(gatewayRegId, endpoint, prefix, objectLinks);
