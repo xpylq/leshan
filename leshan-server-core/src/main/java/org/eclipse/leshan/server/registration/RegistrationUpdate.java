@@ -45,14 +45,14 @@ public class RegistrationUpdate {
     private final Link[] objectLinks;
     private final Map<String, String> additionalAttributes;
 
-    //  gateway support
+    // gateway support
     private final String gatewayRegId;
     private final String gatewayPrefix;
     private final Set<String> endDeviceEndpoints;
 
-
     public RegistrationUpdate(String registrationId, Identity identity, Long lifeTimeInSec, String smsNumber,
-            EnumSet<BindingMode> bindingMode, Link[] objectLinks, Map<String, String> additionalAttributes, String gatewayRegId, String gatewayPrefix, Set<String> endDeviceEndpoints) {
+            EnumSet<BindingMode> bindingMode, Link[] objectLinks, Map<String, String> additionalAttributes,
+            String gatewayRegId, String gatewayPrefix, Set<String> endDeviceEndpoints) {
         Validate.notNull(registrationId);
         Validate.notNull(identity);
         this.registrationId = registrationId;
@@ -88,9 +88,10 @@ public class RegistrationUpdate {
                 : updateAdditionalAttributes(registration.getAdditionalRegistrationAttributes());
 
         // gateway support
-        String gatewayRegId = this.gatewayRegId != null? this.gatewayRegId : registration.getGatewayRegId();
+        String gatewayRegId = this.gatewayRegId != null ? this.gatewayRegId : registration.getGatewayRegId();
         String gatewayPrefix = this.gatewayPrefix != null ? this.gatewayPrefix : registration.getGatewayPrefix();
-        Set<String> endDeviceEndpoints = this.endDeviceEndpoints != null ? this.endDeviceEndpoints : registration.getEndDeviceEndpoints();
+        Set<String> endDeviceEndpoints = this.endDeviceEndpoints != null ? this.endDeviceEndpoints
+                : registration.getEndDeviceEndpoints();
 
         // this needs to be done in any case, even if no properties have changed, in order
         // to extend the client registration time-to-live period ...
@@ -107,10 +108,8 @@ public class RegistrationUpdate {
                 .supportedContentFormats(registration.getSupportedContentFormats())
                 .supportedObjects(registration.getSupportedObject())
                 .availableInstances(registration.getAvailableInstances())
-                .applicationData(registration.getApplicationData())
-                .gatewayRegId(gatewayRegId)
-                .gatewayPrefix(gatewayPrefix)
-                .endDeviceEndpoints(endDeviceEndpoints);
+                .applicationData(registration.getApplicationData()).gatewayRegId(gatewayRegId)
+                .gatewayPrefix(gatewayPrefix).endDeviceEndpoints(endDeviceEndpoints);
         return builder.build();
     }
 

@@ -163,7 +163,7 @@ public class CaliforniumLwM2mRequestSender implements LwM2mRequestSender, CoapRe
 
         String rootPath = destination.getRootPath();
         if (destination.getGatewayPrefix() != null) {
-            rootPath+=destination.getGatewayPrefix();
+            rootPath += destination.getGatewayPrefix();
         }
 
         // Send requests asynchronously
