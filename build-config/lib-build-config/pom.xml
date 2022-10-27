@@ -89,6 +89,12 @@ Contributors:
                     <match>/org\.eclipse\.californium(\..*)?/</match>
                   </item>
                 </exclude>
+                <exclude>
+                  <item>
+                    <matcher>java-package</matcher>
+                    <match>/org\.slf4j(\..*)?/</match>
+                  </item>
+                </exclude>
               </elements>
             </revapi.filter>
           </analysisConfiguration>
